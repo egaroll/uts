@@ -1,17 +1,31 @@
-// app/sections/portofolio/page.js
-
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Ensure that styles and currentTheme are passed from a parent layout component
-export default function Portfolio({ styles, currentTheme }) {
+// Create a context hook to consume theme and styles from a parent provider
+// or use a simpler approach with useState if you don't have a context yet
+export default function Portfolio() {
   const [isVisible, setIsVisible] = useState(false);
+  // Instead of props, we'll use state for theme
+  // You should replace this with your actual theme context if you have one
+  const [currentTheme, setCurrentTheme] = useState({
+    primary: "#007bff", // Default primary color
+  });
 
   useEffect(() => {
     // Trigger animations after component mounts
     setIsVisible(true);
+    
+    // Optional: Get theme from localStorage or a global state
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      try {
+        setCurrentTheme(JSON.parse(savedTheme));
+      } catch (e) {
+        console.error("Error parsing theme from localStorage", e);
+      }
+    }
   }, []);
 
   const projectData = [
@@ -40,6 +54,15 @@ export default function Portfolio({ styles, currentTheme }) {
       link: "/pages/porto3",
     },
   ];
+
+  // Define styles object inside the component instead of receiving as props
+  const styles = {
+    section: {
+      padding: "2rem 0",
+      maxWidth: "1200px",
+      margin: "0 auto",
+    }
+  };
 
   const headerStyle = {
     color: currentTheme.primary,
